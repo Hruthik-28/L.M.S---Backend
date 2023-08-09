@@ -1,0 +1,10 @@
+# Ignore .env file (environment variables)
+.env
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore package-lock.json file (for NPM)
+package-lock.json
+
+server/structure.excalidraw
