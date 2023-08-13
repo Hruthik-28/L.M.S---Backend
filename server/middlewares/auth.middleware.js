@@ -5,16 +5,28 @@ const isLoggedIn = (req, res, next) => {
     const token = (req.cookies && req.cookies.token) || null;
 
     if (!token) {
-        return new AppError('Not authorized, please login again', 401);
+        return next(new AppError('Not authorized, please login again', 401));
     }
 
-    const userDetails = jwt.verify(token, process.env.JWT_SECRET);
-    
-    req.user = userDetails;
+    try {
+        const userDetails = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = userDetails;
+        next();
+    } catch (error) {
+        return next(new AppError('Token verification failed', 401));
+    }
+}
+
+const authorizedRole = (...roles) => async(req, res, next) => {
+    const currentRole = req.user.role;
+
+    if (!roles.includes(currentRole)) {
+        return next(new AppError("you donot have permission to access this route", 403));
+    }
 
     next();
 }
-
 export {
-    isLoggedIn
+    isLoggedIn,
+    authorizedRole
 } 

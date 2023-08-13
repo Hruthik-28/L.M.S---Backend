@@ -42,7 +42,7 @@ const register = async(req, res, next) => {
     }
 
     // FILE UPLOAD
-    console.log("file details:", JSON.stringify(req.file));
+    // console.log("file details:", JSON.stringify(req.file));
     if (req.file) {
         try {
             const result = await cloudinary.v2.uploader.upload(req.file.path, {
